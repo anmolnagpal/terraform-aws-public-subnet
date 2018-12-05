@@ -1,10 +1,10 @@
 output "az_subnet_ids" {
-  value       = "${zipmap(var.availability_zones, list( aws_subnet.public.*.id))}"
+  value       = "${zipmap(var.availability_zones, aws_subnet.public.*.id)}"
   description = "Map of AZ names to subnet IDs"
 }
 
 output "az_route_table_ids" {
-  value       = "${zipmap(var.availability_zones, list( aws_route_table.public.*.id))}"
+  value       = "${zipmap(var.availability_zones, aws_route_table.public.*.id)}"
   description = " Map of AZ names to Route Table IDs"
 }
 
