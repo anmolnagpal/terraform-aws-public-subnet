@@ -3,7 +3,7 @@ locals {
   public_nat_gateways_count = "${var.enabled == "true" && var.type == "public" && var.nat_gateway_enabled == "true" ? length(var.availability_zones) : 0}"
 }
 
-module "public_label" {
+module "label" {
   source       = "git::https://github.com/anmolnagpal/terraform-tags.git"
   organization = "Namespace"
   environment  = "Stage"
@@ -21,9 +21,9 @@ resource "aws_subnet" "public" {
 
   tags = "${
     merge(
-      module.public_label.tags,
+      module.label.tags,
       map(
-        "Name", "${module.public_label.id}${var.delimiter}${element(var.availability_zones, count.index)}",
+        "Name", "${module.label.id}${var.delimiter}${element(var.availability_zones, count.index)}",
         "AZ", "${element(var.availability_zones, count.index)}",
         "Type", "${var.type}"
       )
@@ -37,7 +37,7 @@ resource "aws_network_acl" "public" {
   subnet_ids = ["${aws_subnet.public.*.id}"]
   egress     = "${var.public_network_acl_egress}"
   ingress    = "${var.public_network_acl_ingress}"
-  tags       = "${module.public_label.tags}"
+  tags       = "${module.label.tags}"
   depends_on = ["aws_subnet.public"]
 }
 
@@ -47,9 +47,9 @@ resource "aws_route_table" "public" {
 
   tags = "${
     merge(
-      module.public_label.tags,
+      module.label.tags,
       map(
-        "Name", "${module.public_label.id}${var.delimiter}${element(var.availability_zones, count.index)}",
+        "Name", "${module.label.id}${var.delimiter}${element(var.availability_zones, count.index)}",
         "AZ", "${element(var.availability_zones, count.index)}",
         "Type", "${var.type}"
       )
@@ -93,9 +93,9 @@ resource "aws_nat_gateway" "public" {
 
   tags = "${
     merge(
-      module.public_label.tags,
+      module.label.tags,
       map(
-        "Name", "${module.public_label.id}${var.delimiter}${element(var.availability_zones, count.index)}",
+        "Name", "${module.label.id}${var.delimiter}${element(var.availability_zones, count.index)}",
         "AZ", "${element(var.availability_zones, count.index)}",
         "Type", "${var.type}"
       )
