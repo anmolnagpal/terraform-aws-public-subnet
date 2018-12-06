@@ -5,9 +5,9 @@ locals {
 
 module "label" {
   source       = "git::https://github.com/anmolnagpal/terraform-tags.git"
-  organization = "Namespace"
-  environment  = "Stage"
-  name         = "Name"
+  organization = "${var.organization}"
+  environment  = "${var.environment}"
+  name         = "${var.name}"
   tags         = "${map("Key", "Value")}"
   attributes   = ["${compact(concat(var.attributes, list("public")))}"]
   enabled      = "${var.enabled}"
