@@ -1,34 +1,21 @@
-variable "organization" {
+variable "Name" {
+  description = "Name  (e.g. `app` or `cluster`)"
   type        = "string"
-  description = "Organization (e.g. `cp` or `anmolnagpal`)"
 }
 
-variable "environment" {
+variable "Environment" {
   type        = "string"
   description = "Environment (e.g. `prod`, `dev`, `staging`)"
 }
 
-variable "name" {
+variable "CreatedBy" {
   type        = "string"
-  description = "Application or solution name"
+  description = "CreatedBy (e.g. `terraform`, `dev`, `devops`)"
 }
 
-variable "delimiter" {
+variable "Organization" {
   type        = "string"
-  default     = "-"
-  description = "Delimiter to be used between `organization`, `environment`, `name` and `attributes`"
-}
-
-variable "attributes" {
-  type        = "list"
-  default     = []
-  description = "Additional attributes (e.g. `policy` or `role`)"
-}
-
-variable "tags" {
-  type        = "map"
-  default     = {}
-  description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)"
+  description = "Organization (e.g. `bac`, `cd`)"
 }
 
 variable "availability_zones" {
@@ -64,11 +51,6 @@ variable "igw_id" {
   default     = ""
 }
 
-variable "az_ngw_ids" {
-  type        = "map"
-  description = "Only for private subnets. Map of AZ names to NAT Gateway IDs that are used as default routes when creating private subnets"
-  default     = {}
-}
 
 variable "public_network_acl_id" {
   type        = "string"
@@ -76,11 +58,6 @@ variable "public_network_acl_id" {
   default     = ""
 }
 
-variable "private_network_acl_id" {
-  type        = "string"
-  description = "Network ACL ID that is added to the private subnets. If empty, a new ACL will be created"
-  default     = ""
-}
 
 variable "public_network_acl_egress" {
   description = "Egress network ACL rules"
@@ -114,49 +91,7 @@ variable "public_network_acl_ingress" {
   ]
 }
 
-variable "private_network_acl_egress" {
-  description = "Egress network ACL rules"
-  type        = "list"
-
-  default = [
-    {
-      rule_no    = 100
-      action     = "allow"
-      cidr_block = "0.0.0.0/0"
-      from_port  = 0
-      to_port    = 0
-      protocol   = "-1"
-    },
-  ]
-}
-
-variable "private_network_acl_ingress" {
-  description = "Egress network ACL rules"
-  type        = "list"
-
-  default = [
-    {
-      rule_no    = 100
-      action     = "allow"
-      cidr_block = "0.0.0.0/0"
-      from_port  = 0
-      to_port    = 0
-      protocol   = "-1"
-    },
-  ]
-}
-
 variable "enabled" {
   description = "Set to false to prevent the module from creating any resources"
   default     = "true"
-}
-
-variable "nat_gateway_enabled" {
-  description = "Flag to enable/disable NAT Gateways creation in public subnets"
-  default     = "true"
-}
-
-variable "az_ngw_count" {
-  description = "Count of items in the `az_ngw_ids` map. Needs to be explicitly provided since Terraform currently can't use dynamic count on computed resources from different modules. https://github.com/hashicorp/terraform/issues/10857"
-  default     = 0
 }
